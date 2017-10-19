@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Lab27Cameron.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Lab27Cameron.Controllers
 {
+    [Authorize(Policy = "Admin Only")]
     public class SongsController : Controller
     {
         private readonly Lab27CameronContext _context;
@@ -38,6 +40,7 @@ namespace Lab27Cameron.Controllers
         }
 
         // GET: Songs
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Song.ToListAsync());
