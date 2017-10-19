@@ -1,0 +1,27 @@
+﻿@model Lab27Cameron.Models.RegisterViewModel
+
+<form asp-route-retrunUrl="@ViewData["RetrunURl"]" method="post">
+    <div asp-validation-summary="All"></div>
+    <h4>Create Account</h4>
+
+    <label asp-for="Email"></label>
+    <input asp-for="Email" />
+    <span asp-validation-for="Email"></span>
+
+    <br />
+
+    <label asp-for="Password"></label>
+    <input asp-for="Password" />
+    <span asp-validation-for="Password"></span>
+
+    <br />
+
+    <label asp-for="ConfirmPassword"></label>
+    <input asp-for="ConfirmPassword" />
+    <span asp-validation-for="ConfirmPassword"></span>
+
+    <button type="submit">Create</button>
+
+
+
+</form>
