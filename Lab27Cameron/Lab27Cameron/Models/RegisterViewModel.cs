@@ -26,5 +26,12 @@ namespace Lab27Cameron.Models
         [Compare("Password", ErrorMessage = "Passwords Do Not Match")]
         public string ConfirmPassword { get; set; }
 
+        [Required]
+        public string StageName { get; set; }
+
+        [Required]
+        public int YearsExperience { get; set; }
+
+
     }
 }

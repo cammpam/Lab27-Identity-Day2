@@ -1,1 +1,13 @@
-﻿<h1>Welcome Home!</h1>
+﻿@model List<Lab27Cameron.Models.Song>
+<h1>Catalogue</h1>
+
+@{ 
+    Layout = "_Layout";
+}
+
+@foreach(var c in Model)
+{
+    <h2>@c.Title</h2>
+    <p>@c.Status</p>
+    <p>@c.Contributor1</p>
+}

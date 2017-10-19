@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Lab27Cameron.Controllers
@@ -22,14 +23,13 @@ namespace Lab27Cameron.Controllers
         [HttpGet]
         public IActionResult Register(string returnUrl =null)
         {
-            ViewData["ReturnUrl"] = returnUrl;
+
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel rvm, string returnUrl = null)
+        public async Task<IActionResult> Register(RegisterViewModel rvm)
         {
-            ViewData["RetrunUrl"] = returnUrl;
             if(ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = rvm.Email, Email = rvm.Email };
@@ -37,6 +37,24 @@ namespace Lab27Cameron.Controllers
 
                 if(result.Succeeded)
                 {
+                    //New list where claims are added
+                    List<Claim> myClaims = new List<Claim>();
+
+                    //Creates a list for claims to be added
+                    Claim claim1 = new Claim(ClaimTypes.Name, rvm.StageName + " " + rvm.YearsExperience, ClaimValueTypes.String);
+                    myClaims.Add(claim1);
+
+                    //User Role Claim
+                    Claim claim2 = new Claim(ClaimTypes.Role, "Administrator", ClaimValueTypes.String);
+                    var addClaims = await _userManager.AddClaimsAsync(user, myClaims);
+
+                    //If Claims are successful statement
+                    if(addClaims.Succeeded)
+                    {
+                        await _signInManager.PasswordSignInAsync(rvm.Email, rvm.Password, true, lockoutOnFailure: false);
+                        return RedirectToAction("Index", "Home");
+                    }
+
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
@@ -56,28 +74,19 @@ namespace Lab27Cameron.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(lvm.Email, lvm.Password, lvm.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(lvm.Email, lvm.Password, lvm.RememberMe, lockoutOnFailure: true);
 
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
                 }
             }
-            string error = "Check creditials and try again";
-            ModelState.AddModelError("", error);
             return View();
         }
 
-        private IActionResult RedirectToLocal(string returnUrl)
+        private IActionResult AccessDenied()
         {
-            if(Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
+                return View("Forbidden");
         }
     }
 }
