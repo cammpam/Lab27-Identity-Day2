@@ -10,13 +10,13 @@
     <div>
         @if (!User.Identities.Any(u => u.IsAuthenticated))
         {
-            <span>Welcome!</span>
+            <span>Logged out</span>
 
         }
         else
         {
             <span>
-                Hello @User.Identities.First(u => u.IsAuthenticated &&
+                Logged  In @User.Identities.First(u => u.IsAuthenticated &&
                 u.HasClaim(c => c.Type == ClaimTypes.Name)).FindFirst(ClaimTypes.Name).Value
             </span>
 

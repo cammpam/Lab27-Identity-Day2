@@ -11,9 +11,10 @@ using System;
 namespace Lab27Cameron.Migrations
 {
     [DbContext(typeof(Lab27CameronContext))]
-    partial class Lab27CameronContextModelSnapshot : ModelSnapshot
+    [Migration("20171019182808_updateAdmin")]
+    partial class updateAdmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

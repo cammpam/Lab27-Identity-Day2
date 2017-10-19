@@ -18,8 +18,10 @@ namespace Lab27Cameron.Controllers
 
         public IActionResult Index()
         {
+           
 
-        return View();
+        return View(_context.Song);
+
 
         }
     }
