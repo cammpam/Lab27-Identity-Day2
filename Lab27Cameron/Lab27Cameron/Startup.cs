@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Lab27Cameron.Models;
 using Lab27Cameron.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Lab27Cameron
 {
@@ -26,6 +27,12 @@ namespace Lab27Cameron
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie("MyCookieLogin", options =>
+                options.AccessDeniedPath = new PathString("/Account/Forbidden/"));
+
+            services.AddAuthorization(options =>
+            options.AddPolicy("Admin Only", policy => policy.RequireRole("Administrator")));
             services.AddMvc();
 
             services.AddDbContext<Lab27CameronContext>(options =>
